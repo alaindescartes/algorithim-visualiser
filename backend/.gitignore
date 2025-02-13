@@ -1,0 +1,57 @@
+# Byte-compiled files
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environment
+venv/
+.env
+*.env
+
+# FastAPI-related files
+instance/
+*.db
+*.sqlite3
+
+# Logs
+logs/
+*.log
+
+# Jupyter Notebook checkpoints
+.ipynb_checkpoints
+
+# Test output
+htmlcov/
+.tox/
+.nox/
+.coverage
+coverage.*
+.cache
+pytest_cache/
+nosetests.xml
+coverage.xml
+*.cover
+*.py,cover
+
+# Static files
+static/
+media/
+
+# MyPy type checking
+.mypy_cache/
+.dmypy.json
+dmypy.json
+
+# Pyre type checker
+.pyre/
+
+# IDE-specific files
+# PyCharm
+.idea/
+
+# VSCode
+.vscode/
+*.code-workspace
+
+# MacOS-specific files
+.DS_Store
