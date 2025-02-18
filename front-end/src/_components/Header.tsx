@@ -14,7 +14,7 @@ function Header(): JSX.Element {
     const sendUnsortedArray = async () => {
       const unSortedArr = generateRandomNumbers(20);
       try {
-        const res = await fetch(`http://0.0.0.0:8000/getRandArray`, {
+        const res = await fetch("http://0.0.0.0:8000/getRandArray", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify({ arr: unSortedArr }),
