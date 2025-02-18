@@ -26,6 +26,15 @@ def bubble_sort(array):
     return array
 
 def insertion_sort(array):
+   """
+    Sorts an array in ascending order using the Insertion Sort algorithm.
+    
+    Parameters:
+    array (list): The list of elements to be sorted.
+    
+    Returns:
+    list: The sorted list.
+   """ 
    for current in range(1, len(array)):
        temp = array[current]
        position = current
