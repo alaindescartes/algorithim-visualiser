@@ -1,30 +1,39 @@
-import Chart from "./_components/Chart";
-import Header from "./_components/Header";
+import { useEffect } from "react";
 import { io } from "socket.io-client";
 
-function App() {
-  const socket = io("http://0.0.0.0:8000");
+const socket = io("http://127.0.0.1:8000");
 
-  socket.on("connection", () => {
-    console.log("connected: " + socket.id);
-  });
+const SortingVisualizer = () => {
+  useEffect(() => {
+    socket.on("connect", () => {
+      console.log("✅ Connected to WebSocket: " + socket.id);
+    });
 
-  socket.on("connect_error", (error) => {
-    if (!socket.active) {
-      console.log("could not connect: " + error.message);
-    }
-  });
+    socket.on("connect_error", (error) => {
+      console.error("❌ Connection error:", error.message);
+    });
+
+    socket.on("response_event", (data) => {
+      console.log("📩 Server Response:", data);
+    });
+
+    return () => {
+      socket.off("connect");
+      socket.off("connect_error");
+      socket.off("response_event");
+    };
+  }, []);
+
+  const sendCustomEvent = () => {
+    socket.emit("my_custom_event", { message: "Hello from React!" });
+  };
+
   return (
-    <>
-      <Header />
-      <main className="p-2 flex flex-col gap-4">
-        <div></div>
-        <div className="mt-64">
-          <Chart initialData={[1, 2, 3, 3]} />
-        </div>
-      </main>
-    </>
+    <div>
+      <h2>Sorting Visualizer</h2>
+      <button onClick={sendCustomEvent}>Send Custom Event</button>
+    </div>
   );
-}
+};
 
-export default App;
+export default SortingVisualizer;

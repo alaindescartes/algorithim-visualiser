@@ -1,6 +1,4 @@
 
-unsortedArray = [7, 12, 9, 11, 3]
-
 
 def bubble_sort(array):
     """
@@ -45,4 +43,3 @@ def insertion_sort(array):
        array[position] = temp
    print(array)
    return array
-insertion_sort(unsortedArray)
