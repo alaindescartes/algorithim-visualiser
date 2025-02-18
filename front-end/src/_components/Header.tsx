@@ -1,4 +1,4 @@
-import { JSX } from "react";
+import { JSX, useEffect } from "react";
 import {
   Select,
   SelectContent,
@@ -7,8 +7,33 @@ import {
   SelectValue,
 } from "/Users/alaindescartesuwishema/Desktop/projects/algorithim-visualiser/front-end/src/components/ui/select.tsx";
 import { Button } from "@/components/ui/button";
+import { generateRandomNumbers } from "@/util/helpers";
 
 function Header(): JSX.Element {
+  useEffect(() => {
+    const sendUnsortedArray = async () => {
+      const unSortedArr = generateRandomNumbers(20);
+      try {
+        const res = await fetch(`http://0.0.0.0:8000/getRandArray`, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ arr: unSortedArr }),
+        });
+
+        if (!res.ok) {
+          throw new Error("Failed to send data");
+        }
+
+        const result = await res.json();
+        console.log(result);
+      } catch (error) {
+        const err = error as Error;
+        console.log("there was an error while sending data:" + err.message);
+      }
+    };
+
+    sendUnsortedArray();
+  }, []);
   return (
     <header className="bg-red-600 text-white flex items-center justify-between w-full h-16 px-8 shadow-md">
       {/* Logo and Name */}
