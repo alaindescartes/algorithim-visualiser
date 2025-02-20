@@ -1,8 +1,7 @@
-from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect,Request
 
-# Create an APIRouter specifically for WebSockets (or any endpoints).
+# Create an APIRouter for WebSocket & Sorting Endpoints
 router = APIRouter()
-
 
 @router.websocket("/ws")
 async def websocket_endpoint(websocket: WebSocket):
@@ -17,47 +16,39 @@ async def websocket_endpoint(websocket: WebSocket):
     except WebSocketDisconnect:
         print("Client disconnected")
 
+@router.get("/bubble-sort")
+async def bubble_sort_route(request: Request):
+    if not request.app.state.unsortedArr:
+        return {"error": "No array stored. Use POST /getRandArray first."}
 
-def bubble_sort(array):
-    """
-        Sorts a list of numbers in ascending order using the Bubble Sort algorithm.
-
-        Parameters:
-            array (list): List of numbers to be sorted.
-
-        Returns:
-            list: The sorted list.
-        """
-    size = len(array)
-    while  size > 0:
+    arr = request.app.state.unsortedArr.copy()
+    size = len(arr)
+    while size > 0:
         swapped = False
         for i in range(size - 1):
-            if array[i] > array[i+1]:
-                array[i], array[i+1] = array[i+1], array[i]
+            if arr[i] > arr[i + 1]:
+                arr[i], arr[i + 1] = arr[i + 1], arr[i]
                 swapped = True
 
         size -= 1
         if not swapped:
             break
-    return array
+    return {"sorted_arr": arr}
 
-def insertion_sort(array):
-   """
-    Sorts an array in ascending order using the Insertion Sort algorithm.
-    
-    Parameters:
-    array (list): The list of elements to be sorted.
-    
-    Returns:
-    list: The sorted list.
-   """ 
-   for current in range(1, len(array)):
-       temp = array[current]
-       position = current
-       while position > 0 and array[position-1] > temp:
-           array[position] = array[position-1]
-           position -= 1
+@router.get("/insertion-sort")
+async def insertion_sort_route(request: Request):
+    if not request.app.state.unsortedArr:
+        return {"error": "No array stored. Use POST /getRandArray first."}
 
-       array[position] = temp
-   print(array)
-   return array
+    arr = request.app.state.unsortedArr.copy()
+    for current in range(1, len(arr)):
+        temp = arr[current]
+        position = current
+        while position > 0 and arr[position - 1] > temp:
+            arr[position] = arr[position - 1]
+            position -= 1
+
+        arr[position] = temp
+    return {"sorted_arr": arr}
+
+
