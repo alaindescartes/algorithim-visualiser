@@ -1,21 +1,19 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import { BarChart, Bar, XAxis, ResponsiveContainer } from "recharts";
+import { ArrayContext } from "./arrayContextProvider";
 
 interface DataItem {
   value: number;
 }
 
-interface ChartProps {
-  initialData: number[];
-}
-
-function Chart({ initialData }: ChartProps) {
+function Chart() {
   const [data, setData] = useState<DataItem[]>([]);
+  const { array } = useContext(ArrayContext);
 
   useEffect(() => {
-    const processedData = initialData.map((num) => ({ value: num }));
+    const processedData = array.map((num) => ({ value: num }));
     setData(processedData);
-  }, [initialData]);
+  }, [array]);
 
   return (
     <div style={{ width: "100%", height: 400 }}>
