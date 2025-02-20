@@ -1,3 +1,21 @@
+from fastapi import APIRouter, WebSocket, WebSocketDisconnect
+
+# Create an APIRouter specifically for WebSockets (or any endpoints).
+router = APIRouter()
+
+
+@router.websocket("/ws")
+async def websocket_endpoint(websocket: WebSocket):
+    await websocket.accept()
+    await websocket.send_text("Hello from algorithms.py! WebSocket is connected.")
+
+    try:
+        while True:
+            data = await websocket.receive_text()
+            print("Received from client:", data)
+            await websocket.send_text(f"Message echoed back: {data}")
+    except WebSocketDisconnect:
+        print("Client disconnected")
 
 
 def bubble_sort(array):

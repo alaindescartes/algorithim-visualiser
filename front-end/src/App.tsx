@@ -1,39 +1,39 @@
+import Chart from "./_components/Chart";
+import Header from "./_components/Header";
 import { useEffect } from "react";
-import { io } from "socket.io-client";
+import { socket } from "./util/socket";
 
-const socket = io("http://127.0.0.1:8000");
-
-const SortingVisualizer = () => {
+function App() {
   useEffect(() => {
-    socket.on("connect", () => {
-      console.log("✅ Connected to WebSocket: " + socket.id);
-    });
+    socket.onopen = () => {
+      console.log("WebSocket connected");
+      socket.send("Hello from the browser!");
+    };
 
-    socket.on("connect_error", (error) => {
-      console.error("❌ Connection error:", error.message);
-    });
+    socket.onmessage = (event) => {
+      console.log("Server says:", event.data);
+    };
 
-    socket.on("response_event", (data) => {
-      console.log("📩 Server Response:", data);
-    });
+    socket.onclose = () => {
+      console.log("WebSocket closed");
+    };
 
-    return () => {
-      socket.off("connect");
-      socket.off("connect_error");
-      socket.off("response_event");
+    socket.onerror = (error) => {
+      console.error("WebSocket error:", error);
     };
   }, []);
 
-  const sendCustomEvent = () => {
-    socket.emit("my_custom_event", { message: "Hello from React!" });
-  };
-
   return (
-    <div>
-      <h2>Sorting Visualizer</h2>
-      <button onClick={sendCustomEvent}>Send Custom Event</button>
-    </div>
+    <>
+      <Header />
+      <main className="p-2 flex flex-col gap-4">
+        <div></div>
+        <div className="mt-64">
+          <Chart initialData={[1, 2, 3, 3]} />
+        </div>
+      </main>
+    </>
   );
-};
+}
 
-export default SortingVisualizer;
+export default App;
