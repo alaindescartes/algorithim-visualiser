@@ -11,7 +11,7 @@ import { generateRandomNumbers } from "@/util/helpers";
 import { ControllerContext } from "./ControllerProvider";
 
 function Header(): JSX.Element {
-  const { isSorting, size, setController } = useContext(ControllerContext);
+  const { isSorting, size, setController, url } = useContext(ControllerContext);
 
   useEffect(() => {
     const sendUnsortedArray = async () => {
@@ -37,6 +37,21 @@ function Header(): JSX.Element {
 
     sendUnsortedArray();
   }, []);
+
+  function initiateSort() {
+    if (url === "") {
+      alert("You must select an algorithim first");
+      setController((prev) => ({
+        ...prev,
+        isSorting: false,
+      }));
+    } else {
+      setController((prev) => ({
+        ...prev,
+        isSorting: true,
+      }));
+    }
+  }
   return (
     <header className="bg-red-600 text-white flex items-center justify-between w-full h-16 px-8 shadow-md">
       {/* Logo and Name */}
@@ -89,12 +104,7 @@ function Header(): JSX.Element {
       <Button
         variant="default"
         className="bg-blue-500 hover:bg-blue-600 text-xl text-white px-6 py-2 rounded-md transition-transform transform hover:scale-105 focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
-        onClick={() =>
-          setController((prev) => ({
-            ...prev,
-            isSorting: true,
-          }))
-        }
+        onClick={() => initiateSort()}
         disabled={isSorting}
       >
         {isSorting ? "SORTING..." : "SORT"}

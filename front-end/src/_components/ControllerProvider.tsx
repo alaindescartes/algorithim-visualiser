@@ -27,7 +27,7 @@ function ControllerContextProvider({
     isSorting: false,
     setController: () => {},
   });
-  console.log("controller", controller);
+
   return (
     <ControllerContext.Provider value={{ ...controller, setController }}>
       {children}
