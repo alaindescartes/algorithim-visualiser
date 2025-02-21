@@ -1,8 +1,10 @@
 import { useEffect, useContext } from "react";
 import { ArrayContext } from "@/_components/arrayContextProvider";
+import { ControllerContext } from "@/_components/ControllerProvider";
 
 const useSocket = (url: string) => {
   const { setNewArray } = useContext(ArrayContext);
+  const { setController } = useContext(ControllerContext);
 
   useEffect(() => {
     const socket = new WebSocket(`ws://127.0.0.1:8000/algo/ws/${url}`);
@@ -18,6 +20,10 @@ const useSocket = (url: string) => {
           const data = JSON.parse(event.data);
           if (data.sorted_array) {
             setNewArray([...data.sorted_array]);
+          }
+
+          if (data.status === "done") {
+            setController((prev) => ({ ...prev, isSorting: false }));
           }
         } else {
           console.log("Non-JSON message from server:", event.data);

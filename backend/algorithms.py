@@ -54,5 +54,6 @@ async def websocket_sort(websocket: WebSocket, algo: str):
         arr = websocket.app.state.unsortedArr.copy()
         await sorting_algorithms[algo](arr, websocket)
         await websocket.send_json({"sorted_array": arr})
+        await websocket.send_json({"status": "done", "sorted_array": arr})
     except WebSocketDisconnect:
         print("Client disconnected")
