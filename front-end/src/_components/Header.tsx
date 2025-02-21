@@ -1,4 +1,4 @@
-import { JSX, useEffect } from "react";
+import { JSX, useEffect, useContext } from "react";
 import {
   Select,
   SelectContent,
@@ -8,11 +8,14 @@ import {
 } from "/Users/alaindescartesuwishema/Desktop/projects/algorithim-visualiser/front-end/src/components/ui/select.tsx";
 import { Button } from "@/components/ui/button";
 import { generateRandomNumbers } from "@/util/helpers";
+import { ControllerContext } from "./ControllerProvider";
 
 function Header(): JSX.Element {
+  const { isSorting, size, setController } = useContext(ControllerContext);
+
   useEffect(() => {
     const sendUnsortedArray = async () => {
-      const unSortedArr = generateRandomNumbers(20);
+      const unSortedArr = generateRandomNumbers(size);
       try {
         const res = await fetch("http://0.0.0.0:8000/getRandArray", {
           method: "POST",
@@ -53,7 +56,15 @@ function Header(): JSX.Element {
         </ul>
 
         {/* Algorithm Select Menu */}
-        <Select>
+        <Select
+          onValueChange={(value) =>
+            setController((prev) => ({
+              ...prev,
+              url: value,
+            }))
+          }
+          disabled={isSorting}
+        >
           <SelectTrigger className="w-[200px] bg-slate-700 text-xl text-white rounded-md py-2 px-4 transition hover:bg-slate-600 focus:outline-none focus:ring-2 focus:ring-blue-400">
             <SelectValue placeholder="Algorithms" />
           </SelectTrigger>
@@ -78,8 +89,15 @@ function Header(): JSX.Element {
       <Button
         variant="default"
         className="bg-blue-500 hover:bg-blue-600 text-xl text-white px-6 py-2 rounded-md transition-transform transform hover:scale-105 focus:ring-2 focus:ring-offset-2 focus:ring-blue-400"
+        onClick={() =>
+          setController((prev) => ({
+            ...prev,
+            isSorting: true,
+          }))
+        }
+        disabled={isSorting}
       >
-        SORT
+        {isSorting ? "SORTING..." : "SORT"}
       </Button>
     </header>
   );
