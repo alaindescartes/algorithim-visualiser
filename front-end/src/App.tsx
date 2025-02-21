@@ -5,6 +5,7 @@ import SocketListener from "./_components/SocketListener";
 import ControllerContextProvider from "./_components/ControllerProvider";
 import { ControllerContext } from "./_components/ControllerProvider";
 import { useContext } from "react";
+import { generateRandomNumbers } from "./util/helpers";
 
 function App() {
   return (
@@ -14,7 +15,7 @@ function App() {
         <SocketHandler />
         <main className="p-2 flex flex-col gap-4">
           <div className="mt-64">
-            <Chart />
+            <Chart initialArr={generateRandomNumbers(20)} />
           </div>
         </main>
       </ArrayContextProvider>

@@ -5,15 +5,21 @@ import { ArrayContext } from "./arrayContextProvider";
 interface DataItem {
   value: number;
 }
+interface ChartProps {
+  initialArr: number[];
+}
 
-function Chart() {
+function Chart({ initialArr }: ChartProps) {
   const [data, setData] = useState<DataItem[]>([]);
   const { array } = useContext(ArrayContext);
 
   useEffect(() => {
-    const processedData = array.map((num) => ({ value: num }));
-    setData(processedData);
-  }, [array]);
+    if (array.length > 0) {
+      setData(array.map((num) => ({ value: num })));
+    } else if (initialArr) {
+      setData(initialArr.map((num) => ({ value: num })));
+    }
+  }, [array, initialArr]);
 
   return (
     <div style={{ width: "100%", height: 400 }}>
