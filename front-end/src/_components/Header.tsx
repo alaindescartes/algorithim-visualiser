@@ -52,6 +52,26 @@ function Header(): JSX.Element {
       }));
     }
   }
+
+  function increaseSIze() {
+    const sizeIncrement = 20;
+    if (size >= 100) {
+      alert("Maximum size reached");
+      setController((prev) => ({ ...prev, size: 100 }));
+    } else {
+      setController((prev) => ({ ...prev, size: size + sizeIncrement }));
+    }
+  }
+
+  function reduceSize() {
+    const sizeIncrement = 20;
+    if (size >= 40) {
+      setController((prev) => ({ ...prev, size: size - sizeIncrement }));
+    } else {
+      alert("Minimum size reached");
+      setController((prev) => ({ ...prev, size: 20 }));
+    }
+  }
   return (
     <header className="bg-red-600 text-white flex items-center justify-between w-full h-16 px-8 shadow-md">
       {/* Logo and Name */}
@@ -66,11 +86,17 @@ function Header(): JSX.Element {
             <span className="text-lg font-medium ">HOME</span>
           </li>
           <li className="flex items-center gap-4 hover:text-blue-400 transition duration-300 cursor-pointer">
-            <Button className="bg-black text-white border border-black rounded-full text-3xl w-10 h-10 flex items-center justify-center">
+            <Button
+              onClick={() => reduceSize()}
+              className="bg-black text-white border border-black rounded-full text-3xl w-10 h-10 flex items-center justify-center"
+            >
               -
             </Button>
             <span className="text-lg font-medium">SIZE</span>
-            <Button className="bg-black text-white border border-black rounded-full text-3xl w-10 h-10 flex items-center justify-center">
+            <Button
+              onClick={() => increaseSIze()}
+              className="bg-black text-white border border-black rounded-full text-3xl w-10 h-10 flex items-center justify-center"
+            >
               +
             </Button>
           </li>
