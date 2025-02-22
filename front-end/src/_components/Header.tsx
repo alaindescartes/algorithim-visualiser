@@ -7,35 +7,14 @@ import {
   SelectValue,
 } from "/Users/alaindescartesuwishema/Desktop/projects/algorithim-visualiser/front-end/src/components/ui/select.tsx";
 import { Button } from "@/components/ui/button";
-import { generateRandomNumbers } from "@/util/helpers";
 import { ControllerContext } from "./ControllerProvider";
+import { sendUnsortedArray } from "@/util/helpers";
 
 function Header(): JSX.Element {
   const { isSorting, size, setController, url } = useContext(ControllerContext);
 
   useEffect(() => {
-    const sendUnsortedArray = async () => {
-      const unSortedArr = generateRandomNumbers(size);
-      try {
-        const res = await fetch("http://0.0.0.0:8000/getRandArray", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ arr: unSortedArr }),
-        });
-
-        if (!res.ok) {
-          throw new Error("Failed to send data");
-        }
-
-        const result = await res.json();
-        console.log(result);
-      } catch (error) {
-        const err = error as Error;
-        console.log("there was an error while sending data:" + err.message);
-      }
-    };
-
-    sendUnsortedArray();
+    sendUnsortedArray(size);
   }, []);
 
   function initiateSort() {
@@ -61,6 +40,7 @@ function Header(): JSX.Element {
     } else {
       setController((prev) => ({ ...prev, size: size + sizeIncrement }));
     }
+    sendUnsortedArray(size);
   }
 
   function reduceSize() {
@@ -71,7 +51,9 @@ function Header(): JSX.Element {
       alert("Minimum size reached");
       setController((prev) => ({ ...prev, size: 20 }));
     }
+    sendUnsortedArray(size);
   }
+
   return (
     <header className="bg-red-600 text-white flex items-center justify-between w-full h-16 px-8 shadow-md">
       {/* Logo and Name */}
