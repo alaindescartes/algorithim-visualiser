@@ -60,13 +60,19 @@ function Header(): JSX.Element {
       </div>
 
       {/* Navigation */}
-      <nav className="flex items-center space-x-10">
+      <nav className="flex items-center space-x-14">
         <ul className="flex space-x-8">
-          <li className="hover:text-blue-400 transition duration-300 cursor-pointer">
-            Home
+          <li className="hover:text-blue-400 transition duration-300 cursor-pointer mt-1">
+            <span className="text-lg font-medium ">HOME</span>
           </li>
-          <li className="hover:text-blue-400 transition duration-300 cursor-pointer">
-            Randomize
+          <li className="flex items-center gap-4 hover:text-blue-400 transition duration-300 cursor-pointer">
+            <Button className="bg-black text-white border border-black rounded-full text-3xl w-10 h-10 flex items-center justify-center">
+              -
+            </Button>
+            <span className="text-lg font-medium">SIZE</span>
+            <Button className="bg-black text-white border border-black rounded-full text-3xl w-10 h-10 flex items-center justify-center">
+              +
+            </Button>
           </li>
         </ul>
 
