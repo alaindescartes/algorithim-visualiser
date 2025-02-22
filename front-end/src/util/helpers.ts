@@ -25,8 +25,6 @@ export const sendUnsortedArray = async (arrSize: number) => {
     }
 
     const result = await res.json();
-    console.log("sent data");
-    console.log(result);
   } catch (error) {
     const err = error as Error;
     console.log("there was an error while sending data:" + err.message);

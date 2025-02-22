@@ -19,7 +19,7 @@ function App() {
             <GetSize />
           </div>
           <div className="mt-64">
-            <Chart initialArr={generateRandomNumbers(20)} />
+            <Chart />
           </div>
         </main>
       </ArrayContextProvider>

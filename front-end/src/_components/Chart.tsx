@@ -1,25 +1,35 @@
-import { useState, useEffect, useContext } from "react";
+import { useState, useEffect, useContext, useMemo } from "react";
 import { BarChart, Bar, XAxis, ResponsiveContainer } from "recharts";
-import { ArrayContext } from "./arrayContextProvider";
+import { ArrayContext } from "./ArrayContextProvider";
+import { ControllerContext } from "./ControllerProvider";
+import { generateRandomNumbers } from "@/util/helpers";
 
 interface DataItem {
   value: number;
 }
-interface ChartProps {
-  initialArr: number[];
-}
 
-function Chart({ initialArr }: ChartProps) {
-  const [data, setData] = useState<DataItem[]>([]);
+function Chart() {
   const { array } = useContext(ArrayContext);
+  const { size } = useContext(ControllerContext);
+
+  // Generate a new array when `size` changes
+  const initialArr = useMemo(() => generateRandomNumbers(size), [size]);
+
+  // State for the chart data
+  const [data, setData] = useState<DataItem[]>([]);
+
+  useEffect(() => {
+    // If `array` is empty, update with new initial array when `size` changes
+    if (array.length === 0) {
+      setData(initialArr.map((num) => ({ value: num })));
+    }
+  }, [size, initialArr, array]); // ✅ Now listens for `size` changes
 
   useEffect(() => {
     if (array.length > 0) {
       setData(array.map((num) => ({ value: num })));
-    } else if (initialArr) {
-      setData(initialArr.map((num) => ({ value: num })));
     }
-  }, [array, initialArr]);
+  }, [array]); // ✅ Updates when `array` changes
 
   return (
     <div style={{ width: "100%", height: 400 }}>
