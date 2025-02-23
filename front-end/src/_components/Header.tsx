@@ -15,43 +15,31 @@ function Header(): JSX.Element {
 
   useEffect(() => {
     sendUnsortedArray(size);
-  }, []);
+  }, [size]);
 
   function initiateSort() {
-    if (url === "") {
-      alert("You must select an algorithim first");
-      setController((prev) => ({
-        ...prev,
-        isSorting: false,
-      }));
-    } else {
-      setController((prev) => ({
-        ...prev,
-        isSorting: true,
-      }));
+    if (!url) {
+      alert("You must select an algorithm first");
+      return;
     }
+
+    setController((prev) => ({ ...prev, isSorting: true }));
   }
 
-  function increaseSIze() {
+  function increaseSize() {
     const sizeIncrement = 20;
-    if (size >= 100) {
-      alert("Maximum size reached");
-      setController((prev) => ({ ...prev, size: 100 }));
-    } else {
-      setController((prev) => ({ ...prev, size: size + sizeIncrement }));
-    }
-    sendUnsortedArray(size);
+    setController((prev) => {
+      const newSize = Math.min(prev.size + sizeIncrement, 100);
+      return { ...prev, size: newSize };
+    });
   }
 
   function reduceSize() {
     const sizeIncrement = 20;
-    if (size >= 40) {
-      setController((prev) => ({ ...prev, size: size - sizeIncrement }));
-    } else {
-      alert("Minimum size reached");
-      setController((prev) => ({ ...prev, size: 20 }));
-    }
-    sendUnsortedArray(size);
+    setController((prev) => {
+      const newSize = Math.max(prev.size - sizeIncrement, 20);
+      return { ...prev, size: newSize };
+    });
   }
 
   return (
@@ -76,7 +64,7 @@ function Header(): JSX.Element {
             </Button>
             <span className="text-lg font-medium">SIZE</span>
             <Button
-              onClick={() => increaseSIze()}
+              onClick={() => increaseSize()}
               className="bg-black text-white border border-black rounded-full text-3xl w-10 h-10 flex items-center justify-center"
             >
               +
