@@ -40,6 +40,42 @@ sorting_algorithms = {
     "insertion-sort": insertion_sort,
 }
 
+
+def quickSort(arr):
+    def find_pivot(arr):
+        slow_pointer = -1
+        pivot_index = len(arr) - 1  
+        pivot_value = arr[pivot_index]
+
+        for fast_pointer in range(len(arr)):
+            if arr[fast_pointer] <= pivot_value:
+                slow_pointer += 1
+                arr[slow_pointer], arr[fast_pointer] = arr[fast_pointer], arr[slow_pointer]
+
+        return slow_pointer 
+
+    def left_sort(arr, pivot_index):
+        if pivot_index > 0:
+            left_arr = arr[:pivot_index]
+            return quickSort(left_arr)
+        return []
+
+    def right_sort(arr, pivot_index):
+        if pivot_index + 1 < len(arr):
+            right_arr = arr[pivot_index + 1:]
+            return quickSort(right_arr)
+        return []
+
+    if len(arr) <= 1:
+        return arr
+
+    pivot_index = find_pivot(arr)
+    
+    return left_sort(arr, pivot_index) + [arr[pivot_index]] + right_sort(arr, pivot_index)
+
+        
+         
+
 @router.websocket("/ws/{algo}")
 async def websocket_sort(websocket: WebSocket, algo: str):
     await websocket.accept()
@@ -57,3 +93,6 @@ async def websocket_sort(websocket: WebSocket, algo: str):
         await websocket.send_json({"status": "done", "sorted_array": arr})
     except WebSocketDisconnect:
         print("Client disconnected")
+
+arr = [7, 3, 9, 1, 6]
+print(quickSort(arr))
