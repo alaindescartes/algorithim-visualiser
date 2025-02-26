@@ -98,6 +98,12 @@ function Header(): JSX.Element {
             >
               Insertion Sort
             </SelectItem>
+            <SelectItem
+              value="quick-sort"
+              className="px-4 py-2 hover:bg-blue-500 hover:text-white"
+            >
+              Quick Sort
+            </SelectItem>
           </SelectContent>
         </Select>
       </nav>
