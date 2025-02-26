@@ -41,7 +41,7 @@ sorting_algorithms = {
 }
 
 
-def quickSort(arr):
+async def quickSort(arr, websocket: WebSocket):
     def find_pivot(arr):
         slow_pointer = -1
         pivot_index = len(arr) - 1  
@@ -54,24 +54,29 @@ def quickSort(arr):
 
         return slow_pointer 
 
-    def left_sort(arr, pivot_index):
+    async def left_sort(arr, pivot_index):
         if pivot_index > 0:
             left_arr = arr[:pivot_index]
-            return quickSort(left_arr)
+            return await quickSort(left_arr, websocket)
         return []
 
-    def right_sort(arr, pivot_index):
+    async def right_sort(arr, pivot_index):
         if pivot_index + 1 < len(arr):
             right_arr = arr[pivot_index + 1:]
-            return quickSort(right_arr)
+            return await quickSort(right_arr, websocket)
         return []
 
     if len(arr) <= 1:
         return arr
 
     pivot_index = find_pivot(arr)
+
+    sortedArr = await left_sort(arr, pivot_index) + [arr[pivot_index]] + await right_sort(arr, pivot_index)
     
-    return left_sort(arr, pivot_index) + [arr[pivot_index]] + right_sort(arr, pivot_index)
+    await asyncio.sleep(0.5)
+    await websocket.send_json({"sorted_array": sortedArr})
+
+    return sortedArr
 
         
          
